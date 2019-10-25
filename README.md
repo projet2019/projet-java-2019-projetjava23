@@ -1,8 +1,8 @@
  Projet Jungle Speed  réalisé par :
+	
  
-•	Nadia MBARUSHIMANA
-
-•	Joël YEPGANG
+Nadia MBARUSHIMANA	
+Joël YEPGANG
 
  
  
