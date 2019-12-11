@@ -1,11 +1,15 @@
 package model;
 
-import java.time.LocalDate;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Random;
 
 import controller.Controller;
+import sockets.ListenClient;
 import view.ConsoleView;
 import view.View;
 
@@ -39,7 +43,20 @@ public class Main {
 		controller.addView(vue);
 		
 		timer = new Timer();
-		timer.start();
+		//timer.start();
+		
+		Thread listenClient = null;
+		try {
+			Socket socket = new Socket(InetAddress.getLocalHost(), 2023);
+			listenClient = new Thread(new ListenClient(socket));
+			listenClient.start();
+			
+		}catch(UnknownHostException e) {
+			
+		}catch(IOException e) {
+			
+		}
+		
 		
 		/*
 		 * Main.print(p1.toString()); Main.print(p2.toString());

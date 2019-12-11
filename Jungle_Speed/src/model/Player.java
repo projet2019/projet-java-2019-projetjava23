@@ -1,8 +1,12 @@
 package model;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import sockets.ListenClient;
+
+@SuppressWarnings("deprecation")
 public class Player  extends Observable{
 
 	private int idPlayer;
@@ -12,6 +16,9 @@ public class Player  extends Observable{
 	private ArrayList<Card> cardslnFront = new ArrayList<Card>();
 	
 	private boolean pickTotem = false;
+	
+	private ListenClient scanner;
+	private Socket socket;
 
 	public Player(int idPlayer, String name, ArrayList<Card> cardslnHand, ArrayList<Card> cardslnFront) {
 		
@@ -22,7 +29,7 @@ public class Player  extends Observable{
 	}
 
 	public Player(int idPlayer, String name, Card[] cardslnHand, Card[] cardslnFront) {
-		super();
+		
 		this.idPlayer = idPlayer;
 		this.name = name;
 
@@ -35,7 +42,7 @@ public class Player  extends Observable{
 	}
 
 	public Player(int idPlayer, String name) {
-		super();
+	
 		this.idPlayer = idPlayer;
 		this.name = name;
 
@@ -86,6 +93,35 @@ public class Player  extends Observable{
 	public void setPickTotem(boolean pickTotem) {
 		this.pickTotem = pickTotem;
 	}
+	
+
+	/**
+	 * @return the scanner
+	 */
+	public ListenClient getScanner() {
+		return scanner;
+	}
+
+	/**
+	 * @param scanner the scanner to set
+	 */
+	public void setScanner(ListenClient scanner) {
+		this.scanner = scanner;
+	}
+
+	/**
+	 * @return the socket
+	 */
+	public Socket getSocket() {
+		return socket;
+	}
+
+	/**
+	 * @param socket the socket to set
+	 */
+	public void setSocket(Socket socket) {
+		this.socket = socket;
+	}
 
 	/**
 	 * <u><b>Méthode toString</u></b>
@@ -121,6 +157,7 @@ public class Player  extends Observable{
 	 * @param g <i> Partie en cours
 	 */
 	public void playCard(Game g) {
+		this.getScanner().send(""+this.getIdPlayer(), "playCard");
 		Card c = this.getCardslnHand().get(0);
 		this.getCardslnHand().remove(0);
 		this.getCardslnFront().add(c);
@@ -151,7 +188,7 @@ public class Player  extends Observable{
 	 * @return
 	 */
 	public boolean pickTotem(Game game) {
-
+		this.getScanner().send(""+this.getIdPlayer(), "pickTotem");
 		if (game.isModeArrowInt() == true) {
 			
 			game.getTrash().addAll(this.getCardslnFront());
@@ -200,6 +237,8 @@ public class Player  extends Observable{
 			//	Main.print("Exception lors de la prise de totem du joueur "+this.name);
 			}
 		}
+		
+		
 		return false;
 
 	}
